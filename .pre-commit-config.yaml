@@ -1,0 +1,42 @@
+.pre-commit-config.yamlfail_fast: true
+
+repos:
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        name: (prettier) Reformat YAML files with prettier
+        types: [yaml]
+  # Utilities to avoid common mistakes
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+        name: Check for large files added to git
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict
+        name: Check for files that contain merge conflict strings
+      - id: mixed-line-ending
+        name: Check for mixed line endings
+      - id: no-commit-to-branch
+        name: Prevent commits to protected branches
+        args: ["--branch", "main", "--branch", "master"]
+  - repo: https://github.com/srstevenson/nb-clean
+    rev: 3.2.0
+    hooks:
+      - id: nb-clean
+        args:
+          - --remove-empty-cells
+          - --preserve-cell-metadata
+          - tags
+          - --
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.1
+    hooks:
+      - id: ruff
+        types_or: [python, pyi, jupyter]
+        args: ["--config", "pyproject.toml", "--fix"]
+        exclude: "activelearning/notebooks/"
+      - id: ruff-format
+        types_or: [python, pyi, jupyter]
+        args: ["--config", "pyproject.toml"]

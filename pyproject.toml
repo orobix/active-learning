@@ -1,0 +1,131 @@
+[tool.poetry]
+name = "activelearning"
+version = "0.0.1"
+description = "Query strategies for active learning"
+
+authors = [
+    "Nicola Pesaresi",
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^2.1.2"
+pandas = "^2.2.3"
+scikit-learn = "^1.5.2"
+modal-python = "^0.4.2.1"
+torch = "^2.4.1"
+matplotlib = "^3.9.2"
+torchvision = "^0.19.1"
+skorch = "0.9.0"
+ucimlrepo = "^0.0.7"
+natsort = "^8.4.0"
+seaborn = "^0.13.2"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
+# Align with VSCode extension's version
+ruff = "^0.4.5"
+
+# Test dependencies
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8"
+pytest_cov = "~5.0"
+# Depending on usage, you might want to add more pytest libraries
+# For example: poetry add --group dev pytest_lazy_fixture, pytest_mock, pytest_env
+
+# Notebook dependencies
+[tool.poetry.group.notebook]
+optional = true
+
+[tool.poetry.group.notebook.dependencies]
+notebook = "^7.2.0"
+ipywidgets = "^8.1.2"
+
+[tool.poetry_bumpversion.file."al_representative/__init__.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--strict-markers"
+
+# Pytest coverage
+[tool.coverage.run]
+omit = []
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# ruff already excludes many settings by default
+# exclude = [
+#   "..."
+# ]
+extend-include = ["*.ipynb"]
+# Target version refers to minimum python version supported
+target-version = "py310"
+# Orobix guidelines
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # pycodestyle
+    "W",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # flake8-comprehensions
+    "C4",
+    # docstrings
+    "D",
+    # Pylint
+    "PL",
+]
+
+ignore = [
+    "D100",   # Missing docstring in public module
+    "D104",   # Missing docstring in public package
+    "D105",   # Missing docstring for magic method (def __*__)
+    "D107",   # Missing docstring in __init__ 
+    "D205",   # no blank line after summary line. Usually we violate this rule
+    "E731",   # Do not assign a lambda expression, use a def
+    "E741",   # Checks for the use of the characters 'l', 'O', or 'I' as variable names.
+    "E402",   # Module level import not at top of file
+    "SIM108", # https://github.com/astral-sh/ruff/issues/5528
+    "SIM117", # Single with statement instead of multiple with statements
+    # Pylint specific ignores
+    "PLR0912", # too-many-branches
+    "PLR0913", # too-many-arguments
+    "PLR0914", # too-many-locals
+    "PLR0915", # too-many-statements
+    "PLR1702", # too-many-nested-blocks
+    "PLW1514", # unspecified-encoding
+    "PLR2004", # magic-value-comparison
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# We don't want to enforce line length on notebooks
+"*.ipynb" = ["E501"]
